@@ -4,9 +4,9 @@
 ; she asks. Alyssa's friend Eva Lu Ator claims this can indeed be done,
 ; and she defines a new version of if:
 ;
-;     (define (new-if predicate then-clause else-clause)
-;       (cond (predicate then-clause)
-;             (else else-clause)))
+(define (new-if predicate then-clause else-clause)
+ (cond (predicate then-clause)
+       (else else-clause)))
 ;
 ; Eva demonstrates the program for Alyssa:
 ;
@@ -51,9 +51,11 @@
 
 (define (square x) (* x x))
 
-(sqrt-iter 1.0 2)    ; 1.4142156862745097
+(define (sqrt2 x) (sqrt-iter 1.0 x))
 
-(sqrt-iter 1.0 9)    ; 3.00009155413138
+(sqrt2 2)    ; 1.4142156862745097
+
+(sqrt2 9)    ; 3.00009155413138
 
 
 (define (sqrt-iter-2 guess x)
@@ -62,7 +64,9 @@
     guess
     (sqrt-iter (improve guess x) x)))
 
-(sqrt-iter-2 1.0 9)   ; 3.00009155413138
+(define (sqrt2-2 x) (sqrt-iter-2 1.0 x))
+
+(sqrt2-2 9)
 
 ; # Exercise 1.7:
 ; The good-enough? test used in computing square roots will not be very effective
@@ -95,15 +99,14 @@
     (put guess diff)
     (< diff tolerance)))
 
-(sqrt-iter 1.0 2)
+(sqrt2 2)
 
-(sqrt-iter 1.0 0.0001)
+(sqrt2 0.0001)
 
-(sqrt-iter 1.0 0.00001)
+(sqrt2 0.00001)
 
-(sqrt-iter 1.0 1e35)
+(sqrt2 1e35)   ; never ending process
 
-;
 ; The procedure good-enough? uses 0.001 as a tolerance quotient, this is
 ; quite large for smaller numbers than 0.001, for larger numbers than
 ; 1e30 (on my system) the procedure never terminates. The guess never
@@ -129,6 +132,12 @@
   (let ((diff (/ (abs (- (improve guess x) guess)) guess))
         (tolerance 0.001))
     (< diff tolerance)))
+
+(sqrt2 0.0001)    ; 0.01
+
+(sqrt2 0.00001)   ; 0.003
+
+(sqrt2 1e35)      ; 3.1622e17
 
 ; # Exercise 1.8:
 ; Newton's method for cube roots is based on the fact that if y is an
@@ -164,10 +173,12 @@
 ; good enough just needs to compare the guess to the power of 3 against
 ; the value of x
 (define (good-enough? guess x)
-  (< (abs (- (cube guess) x)) 0.001))
+  (< (abs (- (cube-pow guess) x)) 0.001))
 
-(define (cube x) (* x x x))
+(define (cube-pow x) (* x x x))
 
-(cube-iter 1.0 8)     ; 2.000004
-(cube-iter 1.0 27)    ; 3.000000
-(cube-iter 1.0 64)    ; 4.000017
+(define (cube x) (cube-iter 1.0 x))
+
+(cube 8)     ; 2.000004
+(cube 27)    ; 3.000000
+(cube 64)    ; 4.000017
